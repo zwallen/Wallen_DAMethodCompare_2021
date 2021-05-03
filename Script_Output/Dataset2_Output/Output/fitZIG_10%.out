@@ -1,0 +1,18 @@
+[1] "Tue Apr 20 10:43:06 2021"
+Running phyloseq package version: 
+[1] ‘1.34.0’
+Running dplyr package version: 
+[1] ‘1.0.5’
+Running tibble package version: 
+[1] ‘3.1.0’
+Running metagenomeSeq package version: 
+[1] ‘1.32.0’
+it= 0, nll=804.97, log10(eps+1)=Inf, stillActive=195
+it= 1, nll=873.89, log10(eps+1)=0.02, stillActive=26
+it= 2, nll=874.26, log10(eps+1)=0.04, stillActive=20
+it= 3, nll=877.37, log10(eps+1)=0.02, stillActive=8
+it= 4, nll=879.60, log10(eps+1)=0.00, stillActive=4
+it= 5, nll=880.44, log10(eps+1)=0.00, stillActive=2
+it= 6, nll=880.90, log10(eps+1)=0.00, stillActive=1
+it= 7, nll=881.14, log10(eps+1)=0.00, stillActive=1
+it= 8, nll=881.42, log10(eps+1)=0.00, stillActive=0

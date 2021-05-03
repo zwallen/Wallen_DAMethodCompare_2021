@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+#SBATCH --partition=short
+#SBATCH --job-name=Summarize_results_and_calculate_concordances
+#SBATCH --error=../Script_Output/Dataset2_Output/ErrorOut/Summarize_results_and_calculate_concordances_10%.err
+#SBATCH --output=../Script_Output/Dataset2_Output/Output/Summarize_results_and_calculate_concordances_10%.out
+#SBATCH --ntasks=1
+#SBATCH --time=12:00:00
+#SBATCH --mem-per-cpu=16000
+#SBATCH --mail-type=FAIL
+#SBATCH --mail-user=wallenz@uab.edu
+
+module load R
+module unload R
+
+Rscript Summarize_results_and_calculate_concordances_10%.R
+

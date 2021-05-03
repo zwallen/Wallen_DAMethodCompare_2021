@@ -1,0 +1,145 @@
+
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+
+*** Using default R package library location ***
+
+
+*** Successfully loaded .Rprofile ***
+
+[Previously saved workspace restored]
+
+> ### Perform differential abundance testing using LEfSe
+> 
+> date()
+[1] "Tue Apr 20 10:49:26 2021"
+> 
+> # Load required packages
+> library(phyloseq); cat("Running phyloseq package version:", "\n"); packageVersion("phyloseq")
+Running phyloseq package version: 
+[1] ‘1.22.3’
+> library(tibble); cat("Running tibble package version:", "\n"); packageVersion("tibble")
+Running tibble package version: 
+[1] ‘2.1.3’
+> library(dplyr); cat("Running dplyr package version:", "\n"); packageVersion("dplyr")
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Running dplyr package version: 
+[1] ‘1.0.5’
+> 
+> # Read in phyloseq object
+> ps <- readRDS("../../PhyloseqObjects/Dataset2/phyloseq.rds")
+> 
+> # Collapse amplicon sequence variants to genus level
+> ps <- tax_glom(ps, taxrank = "Genus", NArm = F)
+> 
+> # Filter out taxa found in less than 10% of samples
+> ps <- filter_taxa(ps, function(x) sum(x > 0) >= (0.1*length(x)), TRUE)
+> 
+> # Transform counts to relative abundance (total sum scaling)
+> ps <- transform_sample_counts(ps, function(x){x/sum(x)})
+> 
+> # Extract taxa count data from phyloseq object
+> taxa.df <- data.frame(otu_table(ps))
+> taxa.df <- rownames_to_column(taxa.df, "SampleID")
+> 
+> # Add column for case control designations
+> taxa.df <- cbind(data.frame(case_control=sample_data(ps)$case_control), taxa.df)
+> 
+> # Format for LEfSe input
+> lefse.df <- rownames_to_column(as.data.frame(t(taxa.df)))
+> 
+> # Write out LEfSe input data
+> write.table(lefse.df, "../../Script_Output/Dataset2_Output/LEfSe_input_10%.txt", quote = F, sep="\t", row.names = F, col.names = F)
+> 
+> ### Run LEfSe workflow ###
+> # Requires for LEfSe scripts and their dependencies to be in your PATH, which I found is easiest by making a conda environment
+> # for LEfSe with Python 2 and downloading through conda
+> 
+> # Run python script for formatting
+> system("lefse-format_input.py ../../Script_Output/Dataset2_Output/LEfSe_input_10%.txt ../../Script_Output/Dataset2_Output/LEfSe_input_10%.in -c 1 -s -1 -u 2 -o 1000000")
+> 
+> # Run LEfSe using default parameters
+> system("run_lefse.py ../../Script_Output/Dataset2_Output/LEfSe_input_10%.in ../../Script_Output/Dataset2_Output/LEfSe_10%.txt")
+/home/wallenz/miniconda3/envs/lefse/lib/python2.7/site-packages/rpy2/rinterface/__init__.py:186: RRuntimeWarning: 
+*** Using default R package library location ***
+
+
+  warnings.warn(x, RRuntimeWarning)
+/home/wallenz/miniconda3/envs/lefse/lib/python2.7/site-packages/rpy2/rinterface/__init__.py:186: RRuntimeWarning: 
+*** Successfully loaded .Rprofile ***
+
+
+  warnings.warn(x, RRuntimeWarning)
+Number of significantly discriminative features: 62 ( 62 ) before internal wilcoxon
+Number of discriminative features with abs LDA score > 2.0 : 51
+> 
+> # Run LEfSe using parameters that will output all LDA scores and pvalues
+> system("run_lefse.py ../../Script_Output/Dataset2_Output/LEfSe_input_10%.in ../../Script_Output/Dataset2_Output/LEfSe_full_10%.txt -a 1.0 -w 1.0 -l 0.0")
+/home/wallenz/miniconda3/envs/lefse/lib/python2.7/site-packages/rpy2/rinterface/__init__.py:186: RRuntimeWarning: 
+*** Using default R package library location ***
+
+
+  warnings.warn(x, RRuntimeWarning)
+/home/wallenz/miniconda3/envs/lefse/lib/python2.7/site-packages/rpy2/rinterface/__init__.py:186: RRuntimeWarning: 
+*** Successfully loaded .Rprofile ***
+
+
+  warnings.warn(x, RRuntimeWarning)
+Number of significantly discriminative features: 195 ( 195 ) before internal wilcoxon
+Number of discriminative features with abs LDA score > 0.0 : 195
+> 
+> # Clean up input files
+> system("rm ../../Script_Output/Dataset2_Output/LEfSe_input_10%.txt")
+> system("rm ../../Script_Output/Dataset2_Output/LEfSe_input_10%.in")
+> 
+> ##########################
+> 
+> # Read in results
+> lefse.results <- read.table("../../Script_Output/Dataset2_Output/LEfSe_10%.txt", sep="\t")
+> lefse.results.full <- read.table("../../Script_Output/Dataset2_Output/LEfSe_full_10%.txt")
+> colnames(lefse.results) <- c("Representative_ASV", "LogOfHighestClassAvg", "HighestClass", "LDAScore", "P")
+> 
+> # Add FDR q-values in LEfSe results and further filter for those that are FDR < 0.05
+> lefse.results$FDR_BH <- p.adjust(lefse.results.full[,5], method="BH")
+> lefse.results[lefse.results$FDR_BH > 0.05,c(5,6)] <- "-"
+> lefse.results[lefse.results$P == "-",6] <- "-"
+> lefse.results[is.na(lefse.results$LDAScore),6] <- "-"
+> lefse.results[lefse.results[,6] == "-",3] <- ""
+> lefse.results[lefse.results[,6] == "-",4] <- NA
+> 
+> # Add taxa designations to table
+> lefse.results <- inner_join(lefse.results, rownames_to_column(data.frame(tax_table(ps)), "Representative_ASV"), by = "Representative_ASV")
+> 
+> # Write out results now with corrected pvalues incorporated
+> write.table(lefse.results, "../../Script_Output/Dataset2_Output/LEfSe_10%.txt", quote = F, sep="\t", row.names = F)
+> system("rm ../../Script_Output/Dataset2_Output/LEfSe_full_10%.txt")
+> 
+> proc.time()
+   user  system elapsed 
+409.830 115.639 525.785 

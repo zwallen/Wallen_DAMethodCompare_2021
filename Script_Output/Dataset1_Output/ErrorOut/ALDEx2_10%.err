@@ -1,0 +1,53 @@
+
+*** Using custom R package library location for 4.0 ***
+
+
+*** Successfully loaded .Rprofile ***
+
+Loading required package: zCompositions
+Loading required package: MASS
+Loading required package: NADA
+Loading required package: survival
+
+Attaching package: ‘NADA’
+
+The following object is masked from ‘package:stats’:
+
+    cor
+
+Loading required package: truncnorm
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:MASS’:
+
+    select
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+aldex.clr: generating Monte-Carlo instances and clr values
+operating in serial mode
+removed rows with sums equal to zero
+computing center with all features
+data format is OK
+dirichlet samples complete
+transformation complete
+aldex.ttest: doing t-test
+running tests for each MC instance:
+aldex.effect: calculating effect sizes
+operating in serial mode
+sanity check complete
+rab.all  complete
+rab.win  complete
+rab of samples complete
+within sample difference calculated
+between group difference calculated
+group summaries calculated
+effect size calculated
+summarizing output

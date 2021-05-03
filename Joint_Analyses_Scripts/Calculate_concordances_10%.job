@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+#SBATCH --partition=short
+#SBATCH --job-name=Calculate_concordances
+#SBATCH --error=../Script_Output/Joint_Analyses_Output/ErrorOut/Calculate_concordances_10%.err
+#SBATCH --output=../Script_Output/Joint_Analyses_Output/Output/Calculate_concordances_10%.out
+#SBATCH --ntasks=1
+#SBATCH --time=12:00:00
+#SBATCH --mem-per-cpu=16000
+#SBATCH --mail-type=FAIL
+#SBATCH --mail-user=wallenz@uab.edu
+
+module load R
+module unload R
+
+Rscript Calculate_concordances_10%.R

@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+#SBATCH --partition=short
+#SBATCH --job-name=DESeq2
+#SBATCH --error=../../Script_Output/Dataset2_Output/ErrorOut/DESeq2_10%.err
+#SBATCH --output=../../Script_Output/Dataset2_Output/Output/DESeq2_10%.out
+#SBATCH --ntasks=1
+#SBATCH --time=12:00:00
+#SBATCH --mem-per-cpu=16000
+#SBATCH --mail-type=FAIL
+#SBATCH --mail-user=wallenz@uab.edu
+
+#Load a module of R to get the correct environment for running R, then unload the module to be able to use manually installed R
+module load R
+module unload R
+
+Rscript DESeq2_10%.R

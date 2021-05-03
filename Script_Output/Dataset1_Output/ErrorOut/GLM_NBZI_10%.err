@@ -1,0 +1,18 @@
+
+*** Using custom R package library location for 4.0 ***
+
+
+*** Successfully loaded .Rprofile ***
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+There were 50 or more warnings (use warnings() to see the first 50)

@@ -1,0 +1,98 @@
+
+*** Using custom R package library location for 4.0 ***
+
+
+*** Successfully loaded .Rprofile ***
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:dplyr’:
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:dplyr’:
+
+    first, rename
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+Loading required package: IRanges
+
+Attaching package: ‘IRanges’
+
+The following objects are masked from ‘package:dplyr’:
+
+    collapse, desc, slice
+
+The following object is masked from ‘package:phyloseq’:
+
+    distance
+
+Loading required package: GenomeInfoDb
+Loading required package: abind
+
+Attaching package: ‘baySeq’
+
+The following object is masked from ‘package:dplyr’:
+
+    groups
+
+Finding priors...done.
+Finding posterior likelihoods...Length of priorReps:0
+Length of priorSubset:445
+Length of subset:445
+Length of postRows:445
+Analysing part 1 of 1
+Preparing data......................................................done.
+Estimating likelihoods...Finding priors......done!
+done.
+done.
+Finding posterior likelihoods...Length of priorReps:0
+Length of priorSubset:445
+Length of subset:445
+Length of postRows:445
+Analysing part 1 of 1
+Preparing data............................................done.
+Estimating likelihoods......done!
+done.

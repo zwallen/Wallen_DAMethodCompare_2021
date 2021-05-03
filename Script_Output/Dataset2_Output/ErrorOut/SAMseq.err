@@ -1,0 +1,18 @@
+
+*** Using custom R package library location for 4.0 ***
+
+
+*** Successfully loaded .Rprofile ***
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+slurmstepd: error: *** JOB 8110405 ON c0008 CANCELLED AT 2021-04-26T21:47:38 DUE TO TIME LIMIT ***

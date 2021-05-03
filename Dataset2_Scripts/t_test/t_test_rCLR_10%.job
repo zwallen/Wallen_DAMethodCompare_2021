@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+#SBATCH --partition=short
+#SBATCH --job-name=t_test_rCLR
+#SBATCH --error=../../Script_Output/Dataset2_Output/ErrorOut/t_test_rCLR_10%.err
+#SBATCH --output=../../Script_Output/Dataset2_Output/Output/t_test_rCLR_10%.out
+#SBATCH --ntasks=1
+#SBATCH --time=12:00:00
+#SBATCH --mem-per-cpu=16000
+#SBATCH --mail-type=FAIL
+#SBATCH --mail-user=wallenz@uab.edu
+
+#Load a module of R to get the correct environment for running R, then unload the module to be able to use manually installed R
+module load R
+module unload R
+
+Rscript t_test_rCLR_10%.R
+

@@ -1,0 +1,27 @@
+
+*** Using custom R package library location for 4.0 ***
+
+
+*** Successfully loaded .Rprofile ***
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: ROptSpace
+**--------------------------------------------------------**
+** ROptSpace
+**  - Matrix Reconstruction from a Few Entries
+**
+** Version    : 0.2.2      (2021)
+** Maintainer : Kisung You (kyoustat@gmail.com)
+**
+** Please share any bugs or suggestions to the maintainer.
+**--------------------------------------------------------**
