@@ -7,6 +7,8 @@ The following README gives an overview of the overall structure of the repositor
 ```
 Wallen_DAMethodCompare_2021
 |
+|-- BMC_Bioinformatics_Published_Material -- contains manuscript (pdf) and supplementary material (pdf, xlsx) published in BMC Bioinformatics
+|
 |-- Dataset1_Scripts -- houses scripts used to run differential abundance tests and calculate pairwise concordances for Dataset 1
 |   |
 |   |-- ALDEx2 -- contains scripts used to run ALDEx2
