@@ -1,5 +1,5 @@
 This github repository houses source code used in the manuscript 
-**Wallen, ZD. Comparison study of differential abundance testing methods using two large Parkinson disease gut microbiome datasets derived from 16S amplicon sequencing.**
+**Wallen, Z.D. Comparison study of differential abundance testing methods using two large Parkinson disease gut microbiome datasets derived from 16S amplicon sequencing. BMC Bioinformatics 22, 265 (2021). https://doi.org/10.1186/s12859-021-04193-6.**
 
 The following README gives an overview of the overall structure of the repository, and important notes on how to run the scripts.
 
