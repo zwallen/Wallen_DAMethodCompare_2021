@@ -1,4 +1,4 @@
-### Overview
+## Overview
 
 This directory contains an R function called `DAreport` to run various differential abundance (DA) methods compared in *Wallen 2021 BMC Bioinformatics* on a feature abundance table and generate a report showing the distribution of concordances between DA method results (Figure 1 of *Wallen 2021 BMC Bioinf*) and what differentially abundant features are being detected in relation to their mean relative abundance and fold change between two groups of interest (Figure 3 of *Wallen 2021 BMC Bioinf*). Results of DA methods and other data used in the reports will be returned in a list.
 
@@ -6,13 +6,11 @@ This function was created to address one of the main limitations of the comparis
 
 An R program `run_DAreport.R` is also provided here to run `DAreport` on the command line, and will output the same reports as the function along with a multi-tab excel of contents that would normally be returned as a list if just using the `DAreport` function in R.
 
-Note: certain modifications have been made since the original BMC Bioinformatics comparison study. Modifications include:
-    + Robust CLR with matrix completion is now using default parameters for the `OptSpace` function.
-    + ANCOM v2 R code has been updated to ANCOM v2.1 R code. See [FrederickHuangLin/ANCOM/scripts/ancom_v2.1.R](https://github.com/FrederickHuangLin/ANCOM/blob/master/scripts/ancom_v2.1.R). The code for ANCOM is contained within the function so it does not need to be sourced from the R script provided in the GitHub repository.
-    + The strategy and functions used for GLM NBZI has changed. Now using `glm.nb` function from `stats` to perform negative binomial GLM and `zeroinfl` function from the `pscl` R package to perform zero-inflated negative binomial GLM. This helps with computation time for larger datasets. `NA` p-values that result from either function are given a 1.
-    + Wilcoxon rank-sum test is now being used instead of Kruskal-Wallis as this would be the more appropriate test to use with only two groups of interest.
-
-### Usage
+**Note:** certain modifications have been made since the original BMC Bioinformatics comparison study.
++ Robust CLR with matrix completion is now using default parameters for the `OptSpace` function.
++ ANCOM v2 R code has been updated to ANCOM v2.1 R code. See [FrederickHuangLin/ANCOM/scripts/ancom_v2.1.R](https://github.com/FrederickHuangLin/ANCOM/blob/master/scripts/ancom_v2.1.R). The code for ANCOM is contained within the function so it does not need to be sourced from the R script provided in the GitHub repository.
++ The strategy and functions used for GLM NBZI has changed. Now using `glm.nb` function from `stats` to perform negative binomial GLM and `zeroinfl` function from the `pscl` R package to perform zero-inflated negative binomial GLM. This helps with computation time for larger datasets. `NA` p-values that result from either function are given a 1.
++ Wilcoxon rank-sum test is now being used instead of Kruskal-Wallis as this would be the more appropriate test to use with only two groups of interest.
 
 ## Required packages
 
@@ -65,7 +63,7 @@ Both the R function and the stand-alone program have the same parameters that ar
 
 ## Implementation
 
-+  Example usage of the R function `DAreport` using dataset 1 phyloseq object from *Wallen 2021 BMC Bioinf*.
+Example usage of the R function `DAreport` using dataset 1 phyloseq object from *Wallen 2021 BMC Bioinf*.
 ```
 > library(phyloseq)
 > source('DAreport.R')
@@ -86,8 +84,8 @@ Both the R function and the stand-alone program have the same parameters that ar
 
 ```
 
-+  Example usage of the R program `run_DAreport.R` using dataset 2 phyloseq object from *Wallen 2021 BMC Bioinf*.
-    + First jump into R to format phyloseq object and write out to `.rds` file.
+Example usage of the R program `run_DAreport.R` using dataset 2 phyloseq object from *Wallen 2021 BMC Bioinf*.
++ First jump into R to format phyloseq object and write out to `.rds` file.
 ```
 > library(phyloseq)
 > ps <- readRDS('../PhyloseqObjects/Dataset2/phyloseq.rds')
@@ -96,7 +94,7 @@ Both the R function and the stand-alone program have the same parameters that ar
 > saveRDS(ps, 'ps.rds')
 > quit()
 ```
-    + Now run the R program on the outputted phyloseq object, skipping running of SAMseq.
++ Now run the R program on the outputted phyloseq object, skipping running of SAMseq.
 ```
 $ ./run_DAreport.R ps.rds case_control samseq 1234
 
