@@ -1,4 +1,4 @@
-This github repository houses source code used in the manuscript 
+This github repository houses source code used in the manuscript
 **Wallen, Z.D. Comparison study of differential abundance testing methods using two large Parkinson disease gut microbiome datasets derived from 16S amplicon sequencing. BMC Bioinformatics 22, 265 (2021). https://doi.org/10.1186/s12859-021-04193-6.**
 
 The following README gives an overview of the overall structure of the repository, and important notes on how to run the scripts.
@@ -8,6 +8,9 @@ The following README gives an overview of the overall structure of the repositor
 Wallen_DAMethodCompare_2021
 |
 |-- BMC_Bioinformatics_Published_Material -- contains manuscript (pdf) and supplementary material (pdf, xlsx) published in BMC Bioinformatics
+|
+|-- DAreport -- contains an R function (DAreport) and program (run_DAreport.R) that can be used to perform the type of comparisons detailed
+|               in the manuscript on a user supplied abundance table. see README for further details.
 |
 |-- Dataset1_Scripts -- houses scripts used to run differential abundance tests and calculate pairwise concordances for Dataset 1
 |   |
@@ -114,7 +117,7 @@ Wallen_DAMethodCompare_2021
 Once downloaded, all scripts should be able to be run as is, without any modification to the repository structure or scripts themselves, as long as the required packages and programs are installed.
 
 #### Phyloseq objects used in the manuscript are included in this repository
-As stated in the directory tree, phyloseq objects used in the manuscript for datasets 1 and 2 are located in the `PhyloseqObjects/` directory. Running scripts in `Dataset1_Scripts/`, `Dataset2_Scripts/`, and `Joint_Analyses_Scripts/` directories using these phyloseq objects should give same results as reported in the manuscript. 
+As stated in the directory tree, phyloseq objects used in the manuscript for datasets 1 and 2 are located in the `PhyloseqObjects/` directory. Running scripts in `Dataset1_Scripts/`, `Dataset2_Scripts/`, and `Joint_Analyses_Scripts/` directories using these phyloseq objects should give same results as reported in the manuscript.
 
 #### Results for analyses utilizing manuscript phyloseq objects are included in this repository
 Results that are outputted by analyses scripts and that were reported in the manuscript are located in the `Script_Output/` directory. Any results that are not found in that directory should be in the supplementary material of the manuscript.
@@ -124,5 +127,8 @@ Results that are outputted by analyses scripts and that were reported in the man
 #### There are two types of scripts stored in this repository
 Scripts with the extension `.R` are R scripts written in R programming language used to perform differential abundance analyses and generate plots. Scripts that have a `.job` extension are shell scripts that were used to submit `.R` scripts to a SLURM scheduling system on a high performance computing cluster. Each `.R` script should have an accompanying `.job` script.
 
-#### Each script should have an unfiltered and filtered data version ####
+#### Each script should have an unfiltered and filtered data version
 All differential abundance tests and concordance calculation scripts should have both an unfiltered data (no extra file suffix) and a filtered data (file suffix = "\_10%") version. This also goes for results found in the `Script_Output/` directory (except for hierarchical clustering and heatmap).
+
+#### Perform your own comparison study
+An R function `DAreport` has been added to the repository that allows comparisons detailed in the manuscript (Figures 1 and 3) to be performed on a user supplied feature abundance table. This was added in an attempt to address one of the limitations of the comparison study which is that DA methods will have varying performance depending on the underlying dataset being analyzed, therefore, `DAreport` was written in order to provide others with a user friendly way of running the comparison study on their own datasets to get comparison results specific to their dataset of interest. See the `README.md` file within the directory `DAreport/` for further details on how to run the function.
