@@ -7,6 +7,7 @@ This function was created to address one of the main limitations of the comparis
 An R program `run_DAreport.R` is also provided here to run `DAreport` on the command line, and will output the same reports as the function along with a multi-tab excel of contents that would normally be returned as a list if just using the `DAreport` function in R.
 
 **Note:** certain modifications have been made since the original BMC Bioinformatics comparison study.
++ Log TSS is now being performed by normalizing using TSS first, then log transforming the normalized values after replacing zeros with a pseudo-count of half the minimum TSS normalized value as this way is more intuitive and is the way it is done in popular methods such as MaAsLin2.
 + Robust CLR with matrix completion is now using default parameters for the `OptSpace` function.
 + ANCOM v2 R code has been updated to ANCOM v2.1 R code. See [FrederickHuangLin/ANCOM/scripts/ancom_v2.1.R](https://github.com/FrederickHuangLin/ANCOM/blob/master/scripts/ancom_v2.1.R). The code for ANCOM is contained within the function so it does not need to be sourced from the R script provided in the GitHub repository.
 + The strategy and functions used for GLM NBZI has changed. Now using `glm.nb` function from `stats` to perform negative binomial GLM and `zeroinfl` function from the `pscl` R package to perform zero-inflated negative binomial GLM. This helps with computation time for larger datasets. `NA` p-values that result from either function are given a 1.
@@ -46,6 +47,7 @@ Both the R function and the stand-alone program have the same parameters that ar
 
 + `ps` - Input phyloseq object that contains the observed, un-transformed or -normalized (to total sequence depth) abundances of features (taxa, gene families, pathways, etc.). Should have an `otu_table` component with the abundances, and a `sample_data` component with a variable defining the two groups of interest. This variable should be coded as `1` (for treatment/experimental group) and `0` (for control group). If running the `run_DAreport.R` program, this should be a phyloseq object saved as a `.rds` file.
 + `group.var` - The variable name in the `sample_data` component of the phyloseq object that contains data on which samples belong to which of the two groups of interest. Note only two group variables are accepted.
++ `prev.cut` - The prevalence cutoff for features to be included in the DA testing. Should be a value between 0 and 1, i.e. the proportion of samples a feature should be present in to include. Default is 1 to include all features.
 + `skip` - Name(s) of DA method(s) that you would like to skip running. Must be one or more of `aldex2`, `ancom`, `ancombc`, `deseq2_wald`, `glm_nbzi`, `lefse`, `samseq`, `edger_exactTest_tmm`, `edger_exactTest_rle`, `bayseq`, `fitzig`, `fitfeat`, `limma_voom`, `t_tss`, `t_clr`, `t_rclr`, `w_tss`, `w_clr`, `w_rclr`, `glm_tss`, `glm_clr`, `glm_rclr`. If running the `DAreport` function in R, this should be a vector of method names. If running the `run_DAreport.R` program, method names should be supplied in a comma separated list with no spaces. Default is `NULL`, no skipping. Not required if running R function, but is when running the R program. Two methods you may consider skipping if analyzing large datasets are ANCOM and SAMseq.
 + `seed` - Numeric value to pass to the set.seed() function in order to to make reports consistent. Default is `1234`. Not required when running the R function, but is when running the R program.
 
@@ -80,7 +82,7 @@ Example usage of the R function `DAreport` using dataset 1 phyloseq object from 
 > sample_data(ps)$case_control <- dplyr::recode(sample_data(ps)$case_control, Case=1L, Control=0L)
 
 # run DAreport
-> da.report <- DAreport(ps, "case_control")
+> da.report <- DAreport(ps, group.var="case_control")
 
 ```
 
@@ -96,6 +98,6 @@ Example usage of the R program `run_DAreport.R` using dataset 2 phyloseq object 
 ```
 + Now run the R program on the outputted phyloseq object, skipping running of SAMseq.
 ```
-$ ./run_DAreport.R ps.rds case_control samseq 1234
+$ ./run_DAreport.R ps.rds case_control 1 samseq 1234
 
 ```
