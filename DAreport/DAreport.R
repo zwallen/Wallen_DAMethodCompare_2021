@@ -11,6 +11,11 @@
 #                                                                                 #
 # Note: certain modifications have been made since the original BMC Bioinformatics#
 # comparison study. Modifications include:                                        #
+#           - Log TSS is now being performed by normalizing using TSS first, then #
+#             log transforming the normalized values after replacing zeros with   #
+#             a pseudocount of half the minimum TSS normalized value as this way  #
+#             is more intuitive and is the way it is done in popular methods such #
+#             as MaAsLin2.                                                        #
 #           - Robust CLR with matrix completion is now using default parameters   #
 #             for the OptSpace() function.                                        #
 #           - ANCOM v2 R code has been updated to ANCOM v2.1 R code.              #
@@ -38,12 +43,16 @@
 #     group.var - The variable name in the sample_data component of the phyloseq  #
 #                 object that contains data on which samples belong to which of   #
 #                 the two groups of interest.                                     #
-#          skip - Name(s) of DA method(s) that you would like to skip running.    #
+#      prev.cut - The prevalence cutoff for features to be included in the DA     #
+#                 testing. Should be a value between 0 and 1, i.e. the proportion #
+#                 of samples a feature should be present in to include. Default is#
+#                 1 to include all features.                                      #
+#          skip - Vector of name(s) of DA method(s) that you would like to skip.  #
 #          seed - Numeric value to pass to the set.seed() function in order to    #
 #                 to make reports consistent.                                     #
 ###################################################################################
 
-DAreport <- function(ps, group.var, skip=NULL, seed=1234){
+DAreport <- function(ps, group.var, prev.cut=1, skip=NULL, seed=1234){
 
   # load required libraries
   suppressWarnings(suppressMessages(library(phyloseq)))
@@ -510,20 +519,59 @@ DAreport <- function(ps, group.var, skip=NULL, seed=1234){
   cat('\n', '### Performing needed data transformations ###', '\n')
 
   # tss
-  cat('\n', 'total sum scaling (TSS)...', '\n')
-  ps.tss <- transform_sample_counts(ps, function(x){x/sum(x)})
+  if (length(grep('_tss', skip))==0){
+    cat('\n', 'total sum scaling (TSS)...', '\n')
+    ps.tss <- transform_sample_counts(ps, function(x){x/sum(x)})
+  }
+
   # log tss
-  cat('\n', 'log TSS...', '\n')
-  ps.log.tss <- transform_sample_counts(ps, function(x){log(x+1)/sum(log(x+1))})
+  if (length(grep('_tss', skip))==0){
+    cat('\n', 'log TSS...', '\n')
+    log.trans <- function(x) {
+      y <- replace(x, x == 0, min(x[x>0]) / 2)
+      return(log(y))
+    }
+    ps.log.tss <- ps.tss
+    otu_table(ps.log.tss) <- otu_table(log.trans(data.frame(otu_table(ps.tss))), taxa_are_rows=FALSE)
+  }
+
   # clr
-  cat('\n', 'centered log-ratio (CLR)...', '\n')
-  ps.clr <- transform_sample_counts(ps, function(x){log(x+1)-mean(log(x+1))})
+  if (length(grep('_clr', skip))==0){
+    cat('\n', 'centered log-ratio (CLR)...', '\n')
+    ps.clr <- transform_sample_counts(ps, function(x){log(x+1)-mean(log(x+1))})
+  }
+
   # rclr
-  cat('\n', 'robust CLR with matrix completion...', '\n')
-  ps.rclr <- rclrMC(ps, seed = seed)
+  if (length(grep('_rclr', skip))==0){
+    cat('\n', 'robust CLR with matrix completion...', '\n')
+    ps.rclr <- rclrMC(ps, seed = seed)
+  }
 
   ########### end tranformations  ###########
   ###########################################
+
+  ################################################
+  ##### perform requested feature filtering  #####
+
+  cat('\n', '### Performing requested data filtering ###', '\n')
+
+  ps <- filter_taxa(ps, function(x){sum(x > 0) > (1-prev.cut)*length(x)}, TRUE)
+  if (length(grep('_tss', skip))==0){
+    ps.tss <- prune_taxa(taxa_names(ps.tss)[taxa_names(ps.tss) %in% taxa_names(ps)], ps.tss)
+    ps.log.tss <- prune_taxa(taxa_names(ps.log.tss)[taxa_names(ps.log.tss) %in% taxa_names(ps)], ps.log.tss)
+  }
+  if (length(grep('_clr', skip))==0){
+    ps.clr <- prune_taxa(taxa_names(ps.clr)[taxa_names(ps.clr) %in% taxa_names(ps)], ps.clr)
+  }
+  if (length(grep('_rclr', skip))==0){
+    ps.rclr <- prune_taxa(taxa_names(ps.rclr)[taxa_names(ps.rclr) %in% taxa_names(ps)], ps.rclr)
+  }
+
+  cat('\n', 'Features found in less than', (1-prev.cut)*nsamples(ps), 'samples have been removed', '\n')
+  cat(' Features remaining for differential abundance testing:',ntaxa(ps), '\n')
+
+  ########### end filtering  ###########
+  ######################################
 
   ############################################################
   ###### begin running of differential abundance tests  ######
